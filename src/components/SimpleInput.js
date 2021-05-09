@@ -5,16 +5,24 @@ const SimpleInput = (props) => {
   const [enteredName, setEnteredName] = useState("");
   const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameTouch, setEnteredNameTouch] = useState(false);
-  
-    useEffect(() => {
+
+  useEffect(() => {
     if (enteredNameIsValid) {
       console.log("Entered name is valid");
     }
   }, [enteredNameIsValid]);
- 
 
   const nameInputChangedHandler = (event) => {
     setEnteredName(event.target.value);
+  };
+
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameTouch(true);
+
+    if (enteredName.trim() === "") {
+      setEnteredNameIsValid(false);
+      return;
+    }
   };
 
   const formSubmissionHandler = (event) => {
@@ -38,8 +46,8 @@ const SimpleInput = (props) => {
   const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouch;
 
   const nameInputClasses = nameInputIsInvalid
-  ? "form-control invalid"
-  : "form-control";
+    ? "form-control invalid"
+    : "form-control";
 
   return (
     <form onSubmit={formSubmissionHandler}>
@@ -50,6 +58,7 @@ const SimpleInput = (props) => {
           type="text"
           id="name"
           onChange={nameInputChangedHandler}
+          onBlur={nameInputBlurHandler}
           value={enteredName}
         />
         {nameInputIsInvalid && (
